@@ -14,7 +14,8 @@
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <link rel="stylesheet" href="sidebar.css">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}"> -->
+    <link rel="stylesheet" href="../static/sidebar.css">
 
     <link rel="stylesheet" href="custom-styles.css">
 
@@ -42,7 +43,7 @@
 
         <li>
 
-            <a href="#" onclick="loadContent('index.html')">
+            <a href="#" onclick="loadContent('/')">
 
                 <i class="bx bxs-home"></i>
                 <span class="nav-item">Home</span>
@@ -63,11 +64,11 @@
 
             <ul class="dropdown-menu">
 
-                <li><a href="#" onclick="loadContent('../floor1/floor_1.html')">Floor 1</a></li>
+                <li><a href="#" onclick="loadContent('/floor1')">Floor 1</a></li>
 
-                <li><a href="#" onclick="loadContent('../floor2/floor_2.html')">Floor 2</a></li>
+                <li><a href="#" onclick="loadContent('/floor2')">Floor 2</a></li>
 
-                <li><a href="#" onclick="loadContent('../floor3/floor_3.html')">Floor 3</a></li>
+                <li><a href="#" onclick="loadContent('/floor3')">Floor 3</a></li>
 
             </ul>
 

@@ -17,7 +17,17 @@ def get_db_connection():
 
 @app.route("/")
 def index():
+    initialize_database()
     return render_template("index.html")
+@app.route("/floor1")
+def floor1():
+    return render_template("floor_1.html")
+@app.route("/floor2")
+def floor2():
+    return render_template("floor_2.html")
+@app.route("/floor3")
+def floor3():
+    return render_template("floor_3.html")
 
 @app.route("/api/get/all", methods=["GET"])
 def getAll():

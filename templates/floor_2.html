@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Floor 2</title>
+        <link rel="stylesheet" href="../static/style2.css">
+        <link rel="stylesheet" href="../static/button-style2.css">
+    </head>
+    <body>
+        <div id="Floor">
+            <button class="room_100 round font hover_border change_color clicky" onclick="changeStatus(this)" id="229">Room 229</button>
+            <button class="room_101 round font hover_border change_color clicky" onclick="changeStatus(this)" id="224">Room 224</button>
+            <button class="room_102 round font hover_border change_color clicky" onclick="changeStatus(this)" id="222">Room 222</button>
+            <button class="room_103 round font hover_border change_color clicky" onclick="changeStatus(this)" id="225">Room 225</button>
+            <button class="room_104 round font hover_border change_color clicky" onclick="changeStatus(this)" id="219">Room 219</button>
+            <button class="room_105 round font hover_border change_color clicky" onclick="changeStatus(this)" id="217">Room 217</button>
+            <button class="room_106 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>
+            <button class="room_107 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>             -->
+            <button class="room_108 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>
+            <button class="room_109 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>           
+            <button class="room_110 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>
+            <button class="room_111 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>
+            <button class="room_112 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>            
+            <button class="room_113 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>
+            <button class="room_114 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>
+            <button class="room_115 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>
+            <button class="room_116 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>
+            <button class="room_117 round font hover_border change_color clicky" onclick="changeStatus(this)" id="200">Room 200</button>
+            <button class="room_118 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>
+            <button class="room_119 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>
+            <button class="room_120 round font hover_border change_color clicky" onclick="changeStatus(this)">Office</button>
+            </div>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        
+            <script>
+                // runs at load
+                $(document).ready(function() {
+                    $.ajax({
+                        url: 'http://localhost:5000/api/get/all',
+                        type: 'GET',
+                        success: function(result) {
+                            result.forEach(function(status) {
+                                var roomId = status.id.toString();
+                                var roomStatus = status.status;
+                                var roomButton = document.getElementById(roomId);
+                                if (roomStatus == 1) {
+                                    function vote(element){
+                                        element.classList.toggle("active");
+                                    }
+                                } 
+                            });
+                        }
+                    });
+                });
+    
+                function changeStatus(button) {
+                    var roomId = button.id;  
+    
+                    console.log("Room ID: " + roomId);  
+    
+                    $.getJSON(`/api/get/${roomId}`, function(data) {
+                        var currentStatus = parseInt(data.status);
+                        var newStatus = (currentStatus === 1 ? 0 : 1);  
+    
+                        console.log("Current status: " + currentStatus + ", New status: " + newStatus);
+    
+                        $.ajax({
+                            url: `/api/update/${roomId}`,
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({status: newStatus}),
+                            success: function(response) {
+                                console.log("Response from server:", response);
+                                if (response.success) {
+                                    button.style.backgroundColor = response.status === 1 ? 'red' : 'green';
+                                } else {
+                                    console.error("Status update was not successful.");
+                                }
+                            },
+                            error: function(xhr) {
+                                console.error("Update failed: ", xhr.responseText);
+                            }
+                        });
+                    });
+                }
+                    
+            
+            </script>
+
+        
+    </body>
+</html>

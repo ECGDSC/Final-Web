@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="room-web-backend-example" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <style>
+            .room {
+                color: white;
+                /* background-color: green; */
+                padding: 15px 32px;
+                font-size: 16px;
+            } 
+        </style>
+    </head>
+    <body>
+        <button onclick="changeStatus(this)" class="room" id="211">211</button> 
+        <button onclick="changeStatus(this)" class="room" id="212">212</button> 
+        <button onclick="changeStatus(this)" class="room" id="213">213</button>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        
+        <script>
+            // runs at load
+            $(document).ready(function() {
+                $.ajax({
+                    url: 'http://localhost:5000/api/get/all',
+                    type: 'GET',
+                    success: function(result) {
+                        result.forEach(function(status) {
+                            var roomId = status.id.toString();
+                            var roomStatus = status.status;
+                            var roomButton = document.getElementById(roomId);
+                            if (roomStatus == 1) {
+                                roomButton.style.backgroundColor = 'red';
+                            } else {
+                                roomButton.style.backgroundColor = 'green';
+                            }
+                        });
+                    }
+                });
+            });
+
+            function changeStatus(button) {
+                var roomId = button.id;  
+
+                console.log("Room ID: " + roomId);  
+
+                $.getJSON(`/api/get/${roomId}`, function(data) {
+                    var currentStatus = parseInt(data.status);
+                    var newStatus = (currentStatus === 1 ? 0 : 1);  
+
+                    console.log("Current status: " + currentStatus + ", New status: " + newStatus);
+
+                    $.ajax({
+                        url: `/api/update/${roomId}`,
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({status: newStatus}),
+                        success: function(response) {
+                            console.log("Response from server:", response);
+                            if (response.success) {
+                                button.style.backgroundColor = response.status === 1 ? 'red' : 'green';
+                            } else {
+                                console.error("Status update was not successful.");
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error("Update failed: ", xhr.responseText);
+                        }
+                    });
+                });
+            }
+                
+        
+        </script>
+    </body>
+    
+</html>
